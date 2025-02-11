@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #game-container {
+            display: none;
+        }
+    </style>
+    <script async src="//license.novelgames.com/games/game.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if the user is already blocked
+            if (localStorage.getItem("gameBlocked") === "true") {
+                document.body.innerHTML = "<h1>Access Denied</h1><p>You have been permanently blocked from playing this game.</p>";
+                return;
+            }
+
+            // Show game container
+            document.getElementById("game-container").style.display = "block";
+
+            // Monitor the game screen for "Game Over"
+            const observer = new MutationObserver(() => {
+                const bodyText = document.body.innerText.toLowerCase();
+                if (bodyText.includes("game over") || bodyText.includes("you lose")) {
+                    // Block the game permanently
+                    localStorage.setItem("gameBlocked", "true"); 
+                    alert("Game Over! You are now permanently blocked.");
+                    location.reload(); // Enforce the block
+                }
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+    </script>
+</head>
+<body>
+    <h2>Memory Game</h2>
+    <p>You can only play this game once. If you make a mistake, you will be permanently blocked.</p>
+
+    <div id="game-container">
+        <ins class="novelgames_cloudgame" data-game-short-name="patternmemory2" data-language="en"></ins>
+    </div>
+</body>
+</html>
+
+
+
+
